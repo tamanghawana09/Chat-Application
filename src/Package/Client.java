@@ -1,35 +1,33 @@
 package Package;
 
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Server{
-    static Main main = new Main();
-    public void serverMessage(){
+public class Client {
+    Main main2 = new Main();
+    public void clientMessage(){
         try {
-            ServerSocket ss = new ServerSocket(12345);
-            Socket socket = ss.accept();
+            Socket socket = new Socket("127.0.0.1", 12345);
             BufferedReader socketData = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            String userInput = main.tf.getText();
+            String userInput = main2.tf2.getText();
             OutputStream outputStream = socket.getOutputStream();
             PrintWriter printWriter = new PrintWriter(outputStream,true);
             String sendingMessage, receivingMessage;
             while(true){
+                receivingMessage = socketData.readLine();
+                main2.tf4.setText("Server: " + receivingMessage);
                 sendingMessage = userInput;
                 printWriter.println(sendingMessage);
-                main.tf3.setText("Server: " + sendingMessage);
+                main2.tf4.setText("Client: " + sendingMessage);
                 printWriter.flush();
-                receivingMessage = socketData.readLine();
-                main.tf3.setText("Client: " + receivingMessage);
-
             }
-        }catch(IOException e){
+        }catch(IOException e ){
             e.printStackTrace();
         }
     }
+
     public static void main(String[] args) {
-        Server obj = new Server();
-        obj.serverMessage();
+        Client obj2 = new Client();
+        obj2.clientMessage();
     }
 }
